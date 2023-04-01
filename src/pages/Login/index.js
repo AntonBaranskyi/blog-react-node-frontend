@@ -24,9 +24,17 @@ export const Login = () => {
       password: "12345",
     },
   });
-  const onSubmit = (value) => {
-    dispatch(fetchAuth(value));
-    console.log(value, errors);
+  const onSubmit = async (value) => {
+    const data = await dispatch(fetchAuth(value));
+
+    console.log(data);
+    if (!(await data.payload)) {
+      return alert("Login Error");
+    }
+
+    if ("token" in data.payload) {
+      window.localStorage.setItem("token", data.payload.token);
+    }
   };
 
   if (isAuth) {
