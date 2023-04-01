@@ -9,15 +9,12 @@ import styles from "./Login.module.scss";
 
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchRegister,
-  selectIsRegister,
-} from "../../redux/slices/registerSlice";
+import { fetchRegister, selectIsAuth } from "../../redux/slices/authSlice";
 import { Navigate } from "react-router-dom";
 
 export const Registration = () => {
   const dispatch = useDispatch();
-  const isRegister = useSelector(selectIsRegister);
+  const isAuth = useSelector(selectIsAuth);
 
   const {
     register,
@@ -30,7 +27,7 @@ export const Registration = () => {
     dispatch(fetchRegister(values));
   };
 
-  if (isRegister) {
+  if (isAuth) {
     return <Navigate to="/" />;
   }
   return (
