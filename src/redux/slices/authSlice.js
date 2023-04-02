@@ -41,7 +41,6 @@ const authSlice = createSlice({
     });
 
     builder.addCase(fetchAuth.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.data = action.payload;
       state.status = "succes";
     });
@@ -56,7 +55,6 @@ const authSlice = createSlice({
     });
 
     builder.addCase(fetchAuthMe.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.data = action.payload;
       state.status = "succes";
     });

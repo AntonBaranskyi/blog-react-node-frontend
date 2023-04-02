@@ -17,9 +17,8 @@ export const Home = () => {
   const data = useSelector((state) => state.auth.data);
   useEffect(() => {
     dispatch(fetchPosts());
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const isLoading = status === "loading";
-  console.log(data);
 
   return (
     <>

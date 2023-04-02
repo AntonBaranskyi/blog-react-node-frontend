@@ -8,9 +8,12 @@ import "easymde/dist/easymde.min.css";
 import styles from "./AddPost.module.scss";
 import axios from "../../service/axios";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 export const AddPost = () => {
+  const { id } = useParams();
+
+  const isEdit = Boolean(id);
   const [imageUrl, setImage] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [tags, setTags] = React.useState("");
@@ -24,8 +27,8 @@ export const AddPost = () => {
       const formData = new FormData();
       const file = value.target.files[0];
       formData.append("image", file);
+
       const { data } = await axios.post("/uploads", formData);
-      console.log(data.url);
       setImage(data.url);
     } catch (error) {
       console.log(error);
@@ -41,9 +44,11 @@ export const AddPost = () => {
         text,
         imageUrl,
       };
-      const { data } = await axios.post("/posts", postObj);
-      console.log("Succes " + data);
-      navigate("/");
+
+      const { data } = isEdit
+        ? await axios.patch(`/posts/${id}`)
+        : await axios.post("/posts", postObj);
+      isEdit ? navigate("/") : navigate(`/posts/${data._id}`);
     } catch (err) {
       console.log(err);
       alert("Cannot create post");
@@ -57,6 +62,16 @@ export const AddPost = () => {
   const onChange = React.useCallback((value) => {
     setText(value);
   }, []);
+
+  React.useEffect(() => {
+    axios.get(`/posts/${id}`).then((resp) => {
+      const { title, imageUrl, tags, text } = resp.data;
+      setTitle(title);
+      setImage(imageUrl);
+      setTags(tags);
+      setText(text);
+    });
+  }, [id]);
 
   const options = React.useMemo(
     () => ({
@@ -126,7 +141,7 @@ export const AddPost = () => {
       />
       <div className={styles.buttons}>
         <Button onClick={createPost} size="large" variant="contained">
-          Опубликовать
+          {isEdit ? " Сохранить" : " Опубликовать"}
         </Button>
         <Link to="/">
           <Button size="large">Отмена</Button>

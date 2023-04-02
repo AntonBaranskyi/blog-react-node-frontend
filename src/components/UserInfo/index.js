@@ -6,7 +6,7 @@ export const UserInfo = ({ avatarUrl, fullName, additionalText }) => {
     <div className={styles.root}>
       <img
         className={styles.avatar}
-        src= {'https://mui.com/static/images/avatar/1.jpg' || avatarUrl}
+        src={"https://mui.com/static/images/avatar/1.jpg" || avatarUrl}
         alt={fullName}
       />
       <div className={styles.userDetails}>
